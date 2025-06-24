@@ -6,6 +6,15 @@ const path = require("path");
 require("dotenv").config();
 
 const app = express();
+const cors = require("cors");
+app.use(
+    cors({
+      origin: "https://memo-cb331.web.app",
+      methods: ["POST"],
+      allowedHeaders: ["Content-Type"],
+    })
+  );
+  
 const PORT = 3000;
 
 app.use(express.json());
@@ -20,7 +29,8 @@ const auth = new google.auth.GoogleAuth({
 
 const upload = multer({ dest: "uploads/" });
 
-app.post("/upload", upload.array("attachments"), async (req, res) => {
+app.post("/upload", upload.array("attachments")
+, async (req, res) => {
   try {
     const authClient = await auth.getClient();
     const drive = google.drive({ version: "v3", auth: authClient });
